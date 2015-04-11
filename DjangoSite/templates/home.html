@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load i18n %}
+
+{% block "title" %}Abe{% endblock %}
+
+{% block "header" %}{% endblock %}
+
+{% block "body" %}
+<div class="ga-bg-cover ga-no-menu-padding ga-big-abe">
+  <div class="ga-overlay container">
+    <div class="row text-center ga-full-height">
+      <div class="col-sm-4 col-xs-4 ga-full-height">
+        <a class="ga-big-link" href="{% url 'home' %}#about" title="{% trans 'about' %}">
+          <i class="fa fa-heart ga-big-link-pic"></i>
+          <br />
+          <span class="ga-big-link-text">{% trans 'About' %}</span>
+        </a>
+      </div>
+
+      <div class="col-sm-4 col-xs-4 ga-full-height">
+        <a class="ga-big-link" href="http://ingest.tips" title="{% trans 'blog' %}" target="_blank">
+          <i class="fa fa-forumbee ga-big-link-pic"></i>
+          <br />
+          <span class="ga-big-link-text">{% trans 'Blog' %}</span>
+        </a>
+      </div>
+
+      <div class="col-sm-4 col-xs-4 ga-full-height">
+        <a class="ga-big-link" href="#projects" title="{% trans 'projects' %}">
+          <i class="fa fa-coffee ga-big-link-pic"></i>
+          <br />
+          <span class="ga-big-link-text">{% trans 'Projects' %}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="ga-hr-blue"></div>
+  <br />
+  <section class="container" role="main">
+    <div class="row">
+      <div class="col-sm-12">
+        <h2 class="text-center"><a class="anchorjs-link" name="about"></a>{% trans "About Abe" %}</h2>
+      </div>
+    </div>
+    <div class="row">
+      <h4>{% trans "Self summary" %}</h4>
+      <p>{% blocktrans %}I'm a pretty simple guy. I like building things, bouldering, and sometimes a good game of chess. I see my self as an entrepreneurial minded tech enthusiast and strategist.{% endblocktrans %}</p>
+      <p>{% blocktrans %}I currently work for Cloudera on the Ingest team where I get paid to hack on Sqoop2. We're a pretty active team. We hack, travel, design, and shake things up in general.{% endblocktrans %}</p>
+      <h4>{% trans "Interests" %}</h4>
+      <p>{% blocktrans %}My interests are pretty broad, but at the moment I'm interested in distributed systems, speech recognition, and many source problems.{% endblocktrans %}</p>
+      <h4>{% trans "Places" %}</h4>
+      <p>{% blocktrans %}Here's a map of places I've traveled to.{% endblocktrans %}</p>
+      <iframe src="https://mapsengine.google.com/map/u/1/embed?mid=zV-AQPYOwhBA.kiWdz-Gte-as" width="100%" height="480"></iframe>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <h2 class="text-center"><a class="anchorjs-link" name="projects"></a>{% trans "Projects" %}</h2>
+        <p class="text-center">{% blocktrans %}WARNING! Most of these have broken over time.{% endblocktrans %}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="ga-icon">
+          <h4 class="ga-icon-title">
+            <a href="{% url 'flashcards' %}" title="{% trans 'flash cards' %}">{% trans "Flash cards" %}</a>
+          </h4>
+          <p class="ga-icon-description">{% trans "Practice languages with flashcards!" %}</p>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="ga-icon">
+          <h4 class="ga-icon-title">
+            <a href="{% url 'tones' %}" title="{% trans 'tones' %}">{% trans "Tones" %}</a>
+          </h4>
+          <p class="ga-icon-description">{% trans "Tone practice application" %}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

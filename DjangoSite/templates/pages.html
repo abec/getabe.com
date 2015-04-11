@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% block "main" %}
+{% for page in pages %}
+<div class="page" role="complementary">
+    {% include page.template %}
+</div>
+{% empty %}
+{% trans "No pages" %}
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,156 @@
+{% load i18n %}
+{% load static from staticfiles %}
+
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+<link href="{% static 'select2/select2.css' %}" rel="stylesheet">
+<link href="{% static 'dropzone/css/dropzone.css' %}" rel="stylesheet">
+<link href="{% static 'css/flashcards.css' %}" rel="stylesheet">
+
+<div data-bind="routie: {url: '!/choose'}">
+  <br />
+  <div class="text-center">
+    <a href="#!/play"><i class="fa fa-play" style="font-size: 10em"></i></a>
+  </div>
+
+  <br />
+
+  <form name="choose-flashcards" class="form form-inline text-center">
+    <div class="form-group">
+      <select data-bind="options: availableBooks, selectedOptions: books, select2: { placeholder: 'Select a book'}" class="select2" name="books" style="width: 200px" multiple></select>
+    </div>
+
+    <div class="form-group">
+      <select data-bind="options: availableSections, selectedOptions: sections, select2: { placeholder: 'Select a section'}" class="select2" name="sections" style="width: 200px" multiple></select>
+    </div>
+  </form>
+</div>
+
+<div data-bind="routie: {url: '!/add', fn: vm.game.index}">
+  <form onsubmit="return false" id="upload-flashcards" class="text-center">
+    <input name="book" type="text" placeholder="Book name">
+    <input name="section" type="text" placeholder="Section name">
+    <br /><br />
+    <div class="dropzone"></div>
+  </form>
+</div>
+
+<div data-bind="routie: {url: '!/play', validator: canPlay}, with: game" id="game">
+  <p class="text-center">
+    <span>Flash card</span>
+    <span data-bind="text: index() + 1" class="badge"></span>
+    <span class="small">out of</span>
+    <span data-bind="text: cards().length" class="badge"></span>
+    &nbsp;&nbsp;
+    <a href="#!/help"><i class="fa fa-question-circle"></i></a>
+  </p>
+  <div data-bind="if: currentCard() != null" class="game">
+    <div data-bind="text: currentCard().question()"></div>
+    <div data-bind="text: currentCard().answer(), visible: answered"></div>
+  </div>
+</div>
+
+<div data-bind="routie: {url: '!/help'}, with: game">
+  <p class="text-center">To see the answer, hit the <i class="fa fa-arrow-right"></i> arrow key.</p>
+  <p class="text-center">Use the arrow keys (<i class="fa fa-arrow-left"></i> and <i class="fa fa-arrow-right"></i>) to move forward and backward in the list of flash cards.</p>
+  <p class="text-center">Hit the escape key to return to the book/section selection page.</p>
+  <p class="text-center">
+    <a href="#!/play"><i class="fa fa-reply"></i></a>
+  </p>
+</div>
+
+<script src="{% static 'js/jquery-2.1.1.min.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/bootstrap.min.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/knockout-3.1.0.min.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/routie.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/annyang-1.1.0.min.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/jquery.event.move.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/jquery.swipe.js' %}" type='text/javascript'></script>
+<script src="{% static 'dropzone/js/dropzone.js' %}" type='text/javascript'></script>
+<script src="{% static 'select2/select2.min.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/pinyin_converter.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/knockout.mapping-2.4.1.min.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/ko.routie.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/ko.select2.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/Uni2Pinyin.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/flashcards.js' %}" type='text/javascript'></script>
+
+<script type="text/javascript">
+ko.routie.config.start = '!/choose';
+Dropzone.autoDiscover = false;
+
+var vm = new FlashCardsViewModel();
+vm.load();
+ko.applyBindings(vm);
+ko.routie.start();
+
+function showError(msg) {
+  var el = $('<div class="alert alert-danger fade in"></div>');
+  el.text( msg );
+  $(document.body).prepend(el);
+  el.alert();
+  window.setTimeout(function() { el.alert('close'); }, 3000);
+}
+
+function canPlay() {
+  if (vm.game.cards().length > 0) {
+    $("div:has(select[name='books'])").removeClass('has-error');
+    $("div:has(select[name='sections'])").removeClass('has-error');
+    return true;
+  } else {
+    if (!$("select[name='books']").val()) {
+      showError("Please choose at least one book.");
+    } else if (!$("select[name='sections']").val()) {
+      showError("Please choose at least one section.");
+    }
+    return false;
+  }
+}
+
+$(function() {
+  var dz = new Dropzone('div.dropzone', {
+    'url': '/flashcards/api/cards/upload/',
+  });
+  $('form#upload-flashcards button').click(function() {
+    dz.processQueue();
+  });
+  dz.on("sending", function(file, xhr, formData) {
+    if (!!$('#upload-flashcards input[name="section"]').val()) {
+      formData.append("book", $('#upload-flashcards input[name="book"]').val());
+    }
+    if (!!$('#upload-flashcards input[name="section"]').val()) {
+      formData.append("section", $('#upload-flashcards input[name="section"]').val());
+    }
+  });
+
+  $(document).on('keyup', function(e) {
+    if (e.keyCode == 27) {
+      vm.game.reset();
+      routie('#!/choose');
+    }
+  });
+});
+
+// if (annyang) {
+//   // Let's define our first command. First the text we expect, and then the function it should call
+//   var commands = {
+//     '*chinese': function(chinese) {
+//       if (vm.game.testAnswer(uni2pinyin(chinese))) {
+//         vm.game.answered(true);
+//       } else {
+//         showError('fail: ' + uni2pinyin(chinese));
+//       }
+//     }
+//   };
+
+//   // Add our commands to annyang
+//   annyang.addCommands(commands);
+
+//   // Set language to chinese.
+//   annyang.setLanguage('zh');
+
+//   // Start listening. You can call this here, or attach this call to an event, button, etc.
+//   annyang.start();
+// }
+
+</script>

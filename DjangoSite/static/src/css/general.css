@@ -1,0 +1,101 @@
+html{
+  min-height: 100%;
+  position: relative;
+}
+
+body {
+  padding: 0px;
+  margin: 0px;
+}
+
+/* Cover photo */
+.ga-bg-cover {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.ga-big-abe {
+  background: url("/static/img/abe-thailand-cooking-class-sleeping.jpg") no-repeat 0px -100px;
+  background-size: 100%;
+}
+
+.ga-hr-blue {
+  background: #005392;
+  height: 2px;
+  width: 100%;
+}
+
+/* Big links */
+.ga-big-link {
+  color: white;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+a.ga-big-link:link, a.ga-big-link:visited {
+  color: white;
+  text-decoration: none;
+}
+
+a.ga-big-link:hover {
+  color: #005392;
+  text-decoration: none;
+}
+
+.ga-big-link .ga-big-link-pic {
+  font-size: 10em;
+}
+
+.ga-big-link .ga-big-link-text {
+  font-size: 5em;
+}
+
+@media only screen and (max-device-width: 480px) {
+  .ga-big-link .ga-big-link-pic {
+    font-size: 3em;
+  }
+
+  .ga-big-link .ga-big-link-text {
+    font-size: 1.5em;
+  }
+}
+
+/* Icons */
+.ga-icon {
+  text-align: center;
+}
+
+.ga-icon .ga-icon-pic {
+  font-size: 6em;
+}
+
+.ga-icon .ga-icon-title {
+  font-size: 1.5em;
+}
+
+.ga-icon .ga-icon-description {
+  font-size: 1.25em;
+}
+
+
+/* Extra */
+.ga-overlay {
+  background: rgba(0, 0, 0, 0.75);
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.ga-full-height {
+  height: 100%;
+}
